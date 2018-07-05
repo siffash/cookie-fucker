@@ -1,16 +1,15 @@
 var
-	timer,
-	completed = false,
 	stop = false,
 	position = ['fixed', 'sticky'],
-	specific = ['div#cnsh',									// google
+	id_class = ['cookie', 'gdpr'],
+	specific = ['div#cnsh', 'div#taw',						// google
 				'div#ticker',								// youtube
 				'div[data-testid="cookie-policy-banner"]',	// facebook
 				'div#global-alert-queue',					// linkedin
 				'div#j-aliexpress-notice',					// aliexpress
 				'div#cmp-container-id'						// express.co.uk
 				],
-	txtinside = ['cookie', 'privacy', 'agree', 'accept',	// en
+	txtinside = ['cookie', 'agree', 'accept',				// en
 				'бисквитки', 'приемам', 'съгласен',			// bg
 				'kolačiće',									// bs/hr/sr
 				'piškotke',									// sl
@@ -22,45 +21,54 @@ var
 				'kabul'										// tr
 				];
 
-main();
-	
+main(1);
+
 document.onreadystatechange = () => {
-	if (document.readyState === 'complete' && !completed && !stop) {
-		completed = true;
-		main();
-		const observer = new MutationObserver(main);
-		observer.observe(document.body, {childList: true});
-		setTimeout(() => { observer.disconnect(); }, 5000);
+	if (document.readyState === 'complete' && !stop) {
+		main(2);
+		// if (!stop) {
+        //     const observer = new MutationObserver( records => {
+        //         records.forEach( record => {
+        //             record.addedNodes.forEach( addedNode => {console.log('CHECKING NEW NODE');
+        //                 addedNode.nodeName !== '#text' && ( chkEl(addedNode) || addedNode.querySelectorAll('*').forEach(chkEl) );
+        //             });
+        //         });
+        //     });
+        //     observer.observe(document.body, {childList: true, subtree: true});
+        //     setTimeout(() => { observer.disconnect(); }, 5000);
+		// }
 	}
+};
+
+function removeEl(el) {console.log('>>> COOKIE FUCKER >>> REMOVING THE ELEMENT:');console.log(el);
+	document.body.style.overflow = 'auto';
+	return el.parentNode.removeChild(el);
 }
 
-function findTxt(inp) {
-	return txtinside.some( chk => ~inp.indexOf(chk) );
-}
-
-function findPos(inp) {
-	return ~position.indexOf(inp);
-}
-
-function removeEl(el) {console.log(el);
-	el.parentNode.removeChild(el);
-	return true;
-}
-
-function main(inp) {console.log('RUN');console.log(inp);console.log(document.body.querySelectorAll('*'));
+function main(inp) {console.log('>>> COOKIE FUCKER >>> RUN MAIN CHECK # ' + inp);
 	if (!stop) {
 		~window.location.href.indexOf('oath.com/collectConsent') && document.body.querySelector('form[action="/consent"]').submit();
 		specific.some( el => document.body.querySelector(el) && removeEl(document.body.querySelector(el)) ) && (stop = true);
-		if (!stop) {
-			document.body.querySelectorAll('[id*="cookie" i], [class*="cookie" i], [id*="gdpr" i], [class*="gdpr" i]').forEach( el => {
-				if (findTxt(el.innerText.toLowerCase()))
-					removeEl(el);
-			});
-			document.body.querySelectorAll('*').forEach( el => {
-				if (findPos(window.getComputedStyle(el)['position']) && findTxt(el.innerText.toLowerCase()))
-					~window.location.href.indexOf('instagram.com') ? el.querySelector('button').click() : removeEl(el);
-			});
-			document.body.style.overflow = 'auto';
-		}
+		if (!stop)
+			document.body.querySelectorAll('*').forEach(chkEl);
 	}
+}
+
+function chkEl (el) {console.log('>>> COOKIE FUCKER >>> CHECKING AN ELEMENT...');
+	// return true if the element has been found & removed, otherwise return false
+	return (
+		// check the text inside
+		txtinside.some( chk => find(el.innerText, chk) ) && (
+            // check the id and the class
+			id_class.some( chk => el.id && find(el.id, chk) || el.className && find(el.className, chk) ) && removeEl(el)
+			// check the position
+			|| ~position.indexOf(window.getComputedStyle(el)['position'])
+				// click the warning's button if it's instagram
+				&& (~window.location.href.indexOf('instagram.com') ? !el.querySelector('button').click() : removeEl(el))
+		)
+	);
+}
+
+function find (inp, chk) {
+	return inp && ~inp.toLowerCase().indexOf(chk)
 }
