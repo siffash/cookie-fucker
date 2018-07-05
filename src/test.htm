@@ -1,0 +1,26 @@
+<html>
+<head>
+</head>
+<body>
+<h1>Hi!</h1>
+<span></span>
+<script>
+    const observer = new MutationObserver( records => {
+        records.forEach( record => {
+            record.addedNodes.forEach( node => {
+                console.log(node.parentNode);
+                console.log(document.body.querySelectorAll('*'));
+            });
+        });
+    } );
+    observer.observe(document.body, {childList: true, subtree: true});
+
+    setTimeout(() => {
+        var new_el = document.createElement('h1');
+        var text = document.createTextNode('Hi again!');
+        new_el.appendChild(text);
+        document.getElementsByTagName('span')[0].appendChild(new_el);
+    }, 500);
+</script>
+</body>
+</html>
