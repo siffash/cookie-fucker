@@ -50,15 +50,23 @@ function main(inp) {console.log('>>> COOKIE FUCKER >>> RUN MAIN CHECK # ' + inp)
 		~window.location.href.indexOf('oath.com/collectConsent') && document.body.querySelector('form[action="/consent"]').submit();
 		specific.some( el => document.body.querySelector(el) && removeEl(document.body.querySelector(el)) ) && (stop = true);
 		if (!stop)
-			document.body.querySelectorAll('*').forEach(chkEl);
+			(function iterateNodes(current) {
+				if (current) {
+					const children = current.childNodes;
+					for (let i = 0, len = children.length; i < len; i++) {
+						let child = children[i];
+						!chkEl(child) && iterateNodes(child);
+					}
+				}
+			})(document.body);
 	}
 }
 
-function chkEl (el) {console.log('>>> COOKIE FUCKER >>> CHECKING AN ELEMENT...');
+function chkEl (el) {
 	// return true if the element has been found & removed, otherwise return false
 	return (
 		// check the text inside
-		txtinside.some( chk => find(el.innerText, chk) ) && (
+		el && txtinside.some( chk => find(el.innerText, chk) ) && (
             // check the id and the class
 			id_class.some( chk => el.id && find(el.id, chk) || el.className && find(el.className, chk) ) && removeEl(el)
 			// check the position
