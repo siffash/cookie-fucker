@@ -58,7 +58,7 @@ function main (inp) {
 function chkEl (el) {
 	if (el instanceof Element) {
 		var el_css = window.getComputedStyle(el);
-		var rgba = /(?:[\d.]+, ){3}([\d.]+)/; // take opacity
+		var rgba = /(?:\d+, ){3}([\d.]+)/; // take opacity
 		// return true if the element has been found & removed, otherwise return false
 		return (
 			// check the text inside
