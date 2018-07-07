@@ -1,26 +1,27 @@
 var
-	stop = false,                                                       // stop checkings
-	alpha = /(?:\d+, ){3}([\d.]+)/,                                     // find alpha channel in rgba
-	instagram = Boolean(~window.location.href.indexOf('instagram.com')),// returns true if it's instagram
+	stop = false,                                                               // stop checkings
+	alpha = /(?:\d+, ){3}([\d.]+)/,                                             // find alpha channel in rgba
+	instagram = Boolean(~window.location.href.indexOf('instagram.com')),        // returns true if it's instagram
+	oath = Boolean(~window.location.href.indexOf('oath.com/collectConsent')),   // returns true if it's oath
 	doc_width = document.body.clientWidth,
 	doc_height = window.innerHeight,
 	position = ['fixed', 'sticky'],
-	specific = ['div#cnsh', 'div#taw',						            // google
-				'div#ticker',								            // youtube
-				'div[data-testid="cookie-policy-banner"]',  	        // facebook
-				'div#global-alert-queue',					            // linkedin
-				'div#j-aliexpress-notice'					            // aliexpress
+	specific = ['div#cnsh', 'div#taw',						                    // google
+				'div#ticker',								                    // youtube
+				'div[data-testid="cookie-policy-banner"]',  	                // facebook
+				'div#global-alert-queue',					                    // linkedin
+				'div#j-aliexpress-notice'					                    // aliexpress
 				],
-	txt_insd = ['cookie', 'gdpr', 'notice', 'privacy settings',         // en
-				'бисквитки', 'приемам', 'съгласен',	    	            // bg
-				'kolačiće',									            // bs/hr/sr
-				'piškotke',								    	        // sl
-				'küpsiseid',							    	        // et
-				'evästeitä',							    	        // fi
-				'slapukus', 'slapukų',					    	        // lt
-				'sīkfailus', 'sīkfaili',				    	        // lv
-				'fótspor',								    	        // is
-				'kabul'									    	        // tr
+	txt_insd = ['cookie', 'gdpr', 'notice', 'privacy settings',                 // en
+				'бисквитки', 'приемам', 'съгласен',	    	                    // bg
+				'kolačiće',									                    // bs/hr/sr
+				'piškotke',								    	                // sl
+				'küpsiseid',							    	                // et
+				'evästeitä',							    	                // fi
+				'slapukus', 'slapukų',					    	                // lt
+				'sīkfailus', 'sīkfaili',				    	                // lv
+				'fótspor',								    	                // is
+				'kabul'									    	                // tr
 				];
 
 main(1);
@@ -43,10 +44,11 @@ function removeEl(el) {
 function main (inp) {
 	console.log('>>> COOKIE FUCKER >>> RUN MAIN CHECKING # ' + inp);
 	if (!stop) {
-		~window.location.href.indexOf('oath.com/collectConsent')
-			&& document.body.querySelector('form[action="/consent"]').submit();
-		specific.some( el => document.body.querySelector(el) && removeEl(document.body.querySelector(el)) )
-			&& (stop = true);
+		oath && document.body.querySelector('form[action="/consent"]').submit();
+		specific.some( el => {
+			const el_qs = document.body.querySelector(el);
+			return el_qs && removeEl(el_qs);
+		}) && (stop = true);
 		!stop && (function iterateNodes(current) {
 			if (current) {
 				const children = current.children;
