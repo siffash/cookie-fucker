@@ -1,23 +1,26 @@
 var
-	stop = false,                                               // stop checkings
-	alpha = /(?:\d+, ){3}([\d.]+)/,                             // find alpha channel in rgba
+	stop = false,                                                       // stop checkings
+	alpha = /(?:\d+, ){3}([\d.]+)/,                                     // find alpha channel in rgba
+	instagram = Boolean(~window.location.href.indexOf('instagram.com')),// returns true if it's instagram
+	doc_width = document.body.clientWidth,
+	doc_height = window.innerHeight,
 	position = ['fixed', 'sticky'],
-	specific = ['div#cnsh', 'div#taw',						    // google
-				'div#ticker',								    // youtube
-				'div[data-testid="cookie-policy-banner"]',  	// facebook
-				'div#global-alert-queue',					    // linkedin
-				'div#j-aliexpress-notice'					    // aliexpress
+	specific = ['div#cnsh', 'div#taw',						            // google
+				'div#ticker',								            // youtube
+				'div[data-testid="cookie-policy-banner"]',  	        // facebook
+				'div#global-alert-queue',					            // linkedin
+				'div#j-aliexpress-notice'					            // aliexpress
 				],
-	txt_insd = ['cookie', 'gdpr', 'notice', 'privacy settings', // en
-				'бисквитки', 'приемам', 'съгласен',	    	    // bg
-				'kolačiće',									    // bs/hr/sr
-				'piškotke',								    	// sl
-				'küpsiseid',							    	// et
-				'evästeitä',							    	// fi
-				'slapukus', 'slapukų',					    	// lt
-				'sīkfailus', 'sīkfaili',				    	// lv
-				'fótspor',								    	// is
-				'kabul'									    	// tr
+	txt_insd = ['cookie', 'gdpr', 'notice', 'privacy settings',         // en
+				'бисквитки', 'приемам', 'съгласен',	    	            // bg
+				'kolačiće',									            // bs/hr/sr
+				'piškotke',								    	        // sl
+				'küpsiseid',							    	        // et
+				'evästeitä',							    	        // fi
+				'slapukus', 'slapukų',					    	        // lt
+				'sīkfailus', 'sīkfaili',				    	        // lv
+				'fótspor',								    	        // is
+				'kabul'									    	        // tr
 				];
 
 main(1);
@@ -51,28 +54,27 @@ function main (inp) {
 					var el = children[i];
 					if (el instanceof Element) {
 						var el_css = window.getComputedStyle(el);
-						var outerHTML = el.outerHTML;
 						// check the element's position & its outerHTML
-						( ~position.indexOf(el_css['position']) && txt_insd.some( chk => find(outerHTML, chk) )
+						( ~position.indexOf(el_css['position']) && txt_insd.some( chk => find(el.outerHTML, chk) )
 							// click the warning's button if it's instagram, otherwise true -> will remove it
 							// (click returns false)
-							&& (~window.location.href.indexOf('instagram.com') ? el.querySelector('button').click() : true)
+							&& (instagram ? el.querySelector('button').click() : true)
 							|| (
 								// check whether the element overlaps the whole page
 								~position.indexOf(el_css['position'])
-								&& parseFloat(el_css['width']) >= document.body.clientWidth
-								&& parseFloat(el_css['height']) >= window.innerHeight
-								&& el_css['z-index'] > 100
-								&& el_css['top'] === '0px'
-								&& el_css['left'] === '0px'
-								&& el_css['display'] !== 'none'
-								&& el_css['visibility'] !== 'hidden'
-								&& (el_css['opacity'] < 1
-									|| el_css['background-color'].match(alpha)
-									&& el_css['background-color'].match(alpha)[1] < 1
-								)
+									&& parseFloat(el_css['width']) >= doc_width
+									&& parseFloat(el_css['height']) >= doc_height
+									&& el_css['z-index'] > 100
+									&& el_css['top'] === '0px'
+									&& el_css['left'] === '0px'
+									&& el_css['display'] !== 'none'
+									&& el_css['visibility'] !== 'hidden'
+									&& (el_css['opacity'] < 1
+										|| el_css['background-color'].match(alpha)
+										&& el_css['background-color'].match(alpha)[1] < 1
+										)
 								// for trustarc.com & websites which use its code
-								|| el.className && find(el.className, 'truste_')
+								|| find(el.className, 'truste_')
 							)
 						// if the element was removed / wasn't removed
 						) && removeEl(el) ? i-- && len-- : iterateNodes(el);
