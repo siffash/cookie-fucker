@@ -12,7 +12,7 @@ var
 				'div#global-alert-queue',					                    // linkedin
 				'div#j-aliexpress-notice'					                    // aliexpress
 				],
-	txt_insd = ['cookie', 'gdpr', 'notice', 'privacy settings',                 // en
+	keywords = ['cookie', 'gdpr', 'notice', 'privacy settings',                 // en
 				'бисквитки', 'приемам', 'съгласен',	    	                    // bg
 				'kolačiće',									                    // bs/hr/sr
 				'piškotke',								    	                // sl
@@ -56,28 +56,30 @@ function main (inp) {
 					var el = children[i];
 					if (el instanceof Element) {
 						var el_css = window.getComputedStyle(el);
-						// check the element's position & its outerHTML
-						( ~position.indexOf(el_css['position']) && txt_insd.some( chk => find(el.outerHTML, chk) )
-							// click the warning's button if it's instagram, otherwise true -> will remove it
-							// (click returns false)
-							&& (instagram ? el.querySelector('button').click() : true)
-							|| (
+						// check the element's position
+						( ~position.indexOf(el_css['position'])
+							// check the element's outerHTML
+							&& ( keywords.some(chk => find(el.outerHTML, chk))
+								// click the warning's button if it's instagram, otherwise true -> will remove it
+								// (click returns false)
+								&& ( instagram ? el.querySelector('button').click() : true )
 								// check whether the element overlaps the whole page
-								~position.indexOf(el_css['position'])
-									&& parseFloat(el_css['width']) >= doc_width
+								|| ( parseFloat(el_css['width']) >= doc_width
 									&& parseFloat(el_css['height']) >= doc_height
 									&& el_css['z-index'] > 100
 									&& el_css['top'] === '0px'
 									&& el_css['left'] === '0px'
 									&& el_css['display'] !== 'none'
 									&& el_css['visibility'] !== 'hidden'
-									&& (el_css['opacity'] < 1
+									&& ( el_css['opacity'] < 1
 										|| el_css['background-color'].match(alpha)
-										&& el_css['background-color'].match(alpha)[1] < 1
-										)
-								// for trustarc.com & websites which use its code
-								|| find(el.className, 'truste_')
+											&& el_css['background-color'].match(alpha)[1] < 1
+										|| el_css['background-color'] === 'rgb(0, 0, 0)'
+									)
+								)
 							)
+							// for trustarc.com & websites which use its code
+							|| find(el.className, 'truste_')
 						// if the element was removed / wasn't removed
 						) && removeEl(el) ? i-- && len-- : iterateNodes(el);
 					}
