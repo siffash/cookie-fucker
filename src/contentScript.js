@@ -3,8 +3,6 @@ var
 	alpha = /(?:\d+, ){3}([\d.]+)/,                                             // find alpha channel in rgba
 	instagram = Boolean(~window.location.href.indexOf('instagram.com')),        // returns true if it's instagram
 	oath = Boolean(~window.location.href.indexOf('oath.com/collectConsent')),   // returns true if it's oath
-	doc_width = document.body.clientWidth,
-	doc_height = window.innerHeight,
 	position = ['fixed', 'sticky'],
 	specific = ['div#cnsh', 'div#taw',						                    // google
 				'div#ticker',								                    // youtube
@@ -64,11 +62,11 @@ function main (inp) {
 								// (click returns false)
 								&& ( instagram ? el.querySelector('button').click() : true )
 								// check whether the element overlaps the whole page
-								|| ( parseFloat(el_css['width']) >= doc_width
-									&& parseFloat(el_css['height']) >= doc_height
-									&& el_css['z-index'] > 100
+								|| ( el_css['z-index'] > 100
 									&& el_css['top'] === '0px'
 									&& el_css['left'] === '0px'
+									&& el_css['bottom'] === '0px'
+									&& el_css['right'] === '0px'
 									&& el_css['display'] !== 'none'
 									&& el_css['visibility'] !== 'hidden'
 									&& ( el_css['opacity'] < 1
