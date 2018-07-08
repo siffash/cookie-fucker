@@ -1,13 +1,26 @@
 {
   "name": "Cookie Fucker",
   "version": "1.0",
-  "description": "Hides all cookie warnings. Light and open-sourced.",
-  "content_scripts": [
-   {
+  "description": "Removes all cookie warnings. Light and open-sourced.",
+  "content_scripts": [{
 	"matches": ["http://*/*", "https://*/*"],
 	"run_at": "document_idle",
 	"js": ["contentScript.js"]
-   }
-	],
+  }],
+  "browser_action": {
+	"default_popup": "popup.html",
+	"default_icon": {
+	  "16": "img/16.png",
+	  "32": "img/32.png",
+	  "48": "img/48.png",
+	  "128": "img/128.png"
+	}
+  },
+  "icons": {
+	"16": "img/16.png",
+	"32": "img/32.png",
+	"48": "img/48.png",
+	"128": "img/128.png"
+  },
   "manifest_version": 2
 }

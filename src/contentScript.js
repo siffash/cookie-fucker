@@ -25,7 +25,7 @@ var
 main(1);
 
 document.onreadystatechange = () => {
-	if (document.readyState === 'complete' && !stop) {
+	if (document.readyState === 'complete') {
 		main(2);
 		setTimeout(main, 500, 3);
 	}
@@ -40,8 +40,8 @@ function removeEl(el) {
 }
 
 function main (inp) {
-	console.log('>>> COOKIE FUCKER >>> RUN MAIN CHECKING # ' + inp);
 	if (!stop) {
+		console.log('>>> COOKIE FUCKER >>> RUN MAIN CHECKING # ' + inp);
 		oath && document.body.querySelector('form[action="/consent"]').submit();
 		specific.some( el => {
 			const el_qs = document.body.querySelector(el);
