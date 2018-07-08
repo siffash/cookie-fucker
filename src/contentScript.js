@@ -60,7 +60,7 @@ function main (inp) {
 							&& ( keywords.some(chk => find(el.outerHTML, chk))
 								// click the warning's button if it's instagram, otherwise true -> will remove it
 								// (click returns false)
-								&& ( instagram ? el.querySelector('button').click() : true )
+								&& ( instagram ? (stop = true) && el.querySelector('button').click() : true )
 								// check whether the element overlaps the whole page
 								|| ( el_css['z-index'] > 100
 									&& el_css['top'] === '0px'
