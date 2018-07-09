@@ -1,5 +1,6 @@
 var
 	stop = false,                                                               // stop checkings
+	removed_first = false,                                                      // when 1st element is removed
 	alpha = /(?:\d+, ){3}([\d.]+)/,                                             // find alpha channel in rgba
 	instagram = Boolean(~window.location.href.indexOf('instagram.com')),        // returns true if it's instagram
 	oath = Boolean(~window.location.href.indexOf('oath.com/collectConsent')),   // returns true if it's oath
@@ -32,11 +33,18 @@ document.onreadystatechange = () => {
 };
 
 function removeEl(el) {
+	el.parentNode.removeChild(el);
 	console.log('>>> COOKIE FUCKER >>> REMOVED THE ELEMENT:');
 	console.log(el);
-	el.parentNode.removeChild(el);
-	document.body.style.overflow = 'auto';
+	!removed_first && removedFirst();
 	return true;
+}
+
+function removedFirst() {
+	removed_first = true;
+	document.body.style.overflow = 'auto';
+	const minetilbud_dk = document.querySelector('section.site-container');
+	minetilbud_dk && (minetilbud_dk.style.filter = 'none');
 }
 
 function main () {
