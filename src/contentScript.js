@@ -5,7 +5,7 @@ var
 	instagram = Boolean(~window.location.href.indexOf('instagram.com')),        // returns true if it's instagram
 	oath = Boolean(~window.location.href.indexOf('oath.com/collectConsent')),   // returns true if it's oath
 	position = ['fixed', 'sticky'],
-	specific = ['div#cnsh', 'div#taw',						                    // google
+	specific = ['div#cnsh', 'div#cnso',						                    // google
 				'div#ticker',								                    // youtube
 				'div[data-testid="cookie-policy-banner"]',  	                // facebook
 				'div#global-alert-queue',					                    // linkedin
