@@ -37,12 +37,12 @@ function removeEl (el) {
 	el.parentNode.removeChild(el);
 	console.log('>>> COOKIE FUCKER >>> REMOVED THE ELEMENT:');
 	console.log(el);
-	!removed_first && () => {
+	!removed_first && (() => {
 		removed_first = true;
 		document.body.style.overflow = 'auto';
 		const minetilbud_dk = document.querySelector('section.site-container');
 		minetilbud_dk && (minetilbud_dk.style.filter = 'none');
-	};
+	})();
 	return true;
 }
 
