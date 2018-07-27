@@ -9,6 +9,7 @@ var
 				'div#ticker',								                    // youtube
 				'div[data-testid="cookie-policy-banner"]',  	                // facebook
 				'div#global-alert-queue',					                    // linkedin
+				'div.eu-cookie-notice',											// twitter
 				'div#j-aliexpress-notice'					                    // aliexpress
 				],
 	keywords = ['cookie', 'gdpr', 'notice', 'privacy settings',                 // en
@@ -32,19 +33,17 @@ document.onreadystatechange = () => {
 	}
 };
 
-function removeEl(el) {
+function removeEl (el) {
 	el.parentNode.removeChild(el);
 	console.log('>>> COOKIE FUCKER >>> REMOVED THE ELEMENT:');
 	console.log(el);
-	!removed_first && removedFirst();
+	!removed_first && () => {
+		removed_first = true;
+		document.body.style.overflow = 'auto';
+		const minetilbud_dk = document.querySelector('section.site-container');
+		minetilbud_dk && (minetilbud_dk.style.filter = 'none');
+	};
 	return true;
-}
-
-function removedFirst() {
-	removed_first = true;
-	document.body.style.overflow = 'auto';
-	const minetilbud_dk = document.querySelector('section.site-container');
-	minetilbud_dk && (minetilbud_dk.style.filter = 'none');
 }
 
 function main () {
@@ -53,7 +52,7 @@ function main () {
 		const el_qs = document.body.querySelector(el);
 		return el_qs && removeEl(el_qs);
 	}) && (stop = true);
-	!stop && (function iterateNodes(current) {
+	!stop && (function iterateNodes (current) {
 		if (current) {
 			const children = current.children;
 			for (let i = 0, len = children.length; i < len; i++) {
