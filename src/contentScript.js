@@ -2,7 +2,7 @@ var
 	stop = false,                                                               // stop checkings
 	removed_first = false,                                                      // when 1st element is removed
 	alpha = /(?:\d+, ){3}([\d.]+)/,                                             // find alpha channel in rgba
-	instagram = Boolean(~window.location.href.indexOf('instagram.com')),        // returns true if it's instagram
+	instagram = Boolean(~window.location.hostname.indexOf('instagram.com')),    // returns true if it's instagram
 	oath = Boolean(~window.location.href.indexOf('oath.com/collectConsent')),   // returns true if it's oath
 	position = ['fixed', 'sticky'],
 	specific = ['div#cnsh', 'div#cnso',						                    // google
@@ -12,7 +12,7 @@ var
 				'div.eu-cookie-notice',											// twitter
 				'div#j-aliexpress-notice'					                    // aliexpress
 				],
-	keywords = ['cookie', 'gdpr', 'notice', 'privacy settings',                 // en
+	keywords = ['cookie', 'gdpr', 'privacy settings',                     // en
 				'бисквитки', 'приемам', 'съгласен',	    	                    // bg
 				'kolačiće',									                    // bs/hr/sr
 				'piškotke',								    	                // sl
