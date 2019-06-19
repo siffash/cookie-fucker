@@ -11,7 +11,7 @@ var
 				'div#global-alert-queue',					                    // linkedin
 				'div#j-aliexpress-notice'					                    // aliexpress
 				],
-	keywords = ['cookie', 'gdpr', 'notice', 'privacy settings',                 // en
+	keywords = ['cookie', ' notice', 'privacy settings',                        // en
 				'бисквитки', 'приемам', 'съгласен',	    	                    // bg
 				'kolačiće',									                    // bs/hr/sr
 				'piškotke',								    	                // sl
@@ -34,8 +34,7 @@ document.onreadystatechange = () => {
 
 function removeEl(el) {
 	el.parentNode.removeChild(el);
-	console.log('>>> COOKIE FUCKER >>> REMOVED THE ELEMENT:');
-	console.log(el);
+	console.log('>>> COOKIE FUCKER >>> REMOVED THE ELEMENT:', el);
 	!removed_first && removedFirst();
 	return true;
 }
@@ -43,49 +42,54 @@ function removeEl(el) {
 function removedFirst() {
 	removed_first = true;
 	document.body.style.overflow = 'auto';
-	const minetilbud_dk = document.querySelector('section.site-container');
+	var minetilbud_dk = document.querySelector('section.site-container');
 	minetilbud_dk && (minetilbud_dk.style.filter = 'none');
 }
 
 function main () {
 	!stop && oath && document.body.querySelector('form[action="/consent"]').submit();
 	!stop && specific.some( el => {
-		const el_qs = document.body.querySelector(el);
+		var el_qs = document.body.querySelector(el);
 		return el_qs && removeEl(el_qs);
 	}) && (stop = true);
 	!stop && (function iterateNodes(current) {
 		if (current) {
-			const children = current.children;
+			var children = current.children;
 			for (let i = 0, len = children.length; i < len; i++) {
 				var el = children[i];
 				if (el instanceof Element) {
+					var el_html = el.outerHTML.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
 					var el_css = window.getComputedStyle(el);
-					// check the element's position
-					( ~position.indexOf(el_css['position'])
-						// check the element's outerHTML
-						&& ( keywords.some(chk => find(el.outerHTML, chk))
-							// click the warning's button if it's instagram, otherwise true -> will remove it
-							// (click returns false)
-							&& ( instagram ? (stop = true) && el.querySelector('button').click() : true )
-							// check whether the element overlaps the whole page
-							|| ( el_css['z-index'] > 100
-								&& el_css['top'] === '0px'
-								&& el_css['left'] === '0px'
-								&& el_css['bottom'] === '0px'
-								&& el_css['right'] === '0px'
-								&& el_css['display'] !== 'none'
-								&& el_css['visibility'] !== 'hidden'
-								&& ( el_css['opacity'] < 1
-									|| el_css['background-color'].match(alpha)
-										&& el_css['background-color'].match(alpha)[1] < 1
-									|| el_css['background-color'] === 'rgb(0, 0, 0)'
-								)
-							)
+					var positionIsFixed = ~position.indexOf(el_css['position']);
+					var containsSpecialKeywords = keywords.some(keyword => find(el_html, keyword));
+					var overlapsWholePage = (
+						el_css['z-index'] > 100 &&
+						el_css['top'] === '0px' &&
+						el_css['left'] === '0px' &&
+						el_css['bottom'] === '0px' &&
+						el_css['right'] === '0px' &&
+						el_css['display'] !== 'none' &&
+						el_css['visibility'] !== 'hidden' &&
+						(
+							el_css['opacity'] < 1 ||
+							el_css['background-color'].match(alpha) && el_css['background-color'].match(alpha)[1] < 1 ||
+							el_css['background-color'] === 'rgb(0, 0, 0)'
 						)
-						// for trustarc.com & websites which use its code
-						|| find(el.className, 'truste_')
-					// if the element was removed / wasn't removed
-					) && removeEl(el) ? i-- && len-- : iterateNodes(el);
+					);
+					var trustarc_com = find(el.className, 'truste_');
+					var clickInstagramButton = (
+						instagram &&
+						containsSpecialKeywords &&
+						(stop = true) &&
+						el.querySelector('button.coreSpriteDismissLarge') &&
+						el.querySelector('button.coreSpriteDismissLarge').click() // click returns false
+					);
+					var elToBeRemoved = (
+						positionIsFixed && (containsSpecialKeywords || overlapsWholePage) ||
+						trustarc_com ||
+						clickInstagramButton
+					);
+					elToBeRemoved && removeEl(el) ? i-- && len-- : iterateNodes(el);
 				}
 			}
 		}
