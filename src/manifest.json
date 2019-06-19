@@ -1,6 +1,6 @@
 {
   "name": "Cookie Fucker",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Removes all cookie warnings. Light and open-sourced.",
   "content_scripts": [{
 	"matches": ["http://*/*", "https://*/*"],

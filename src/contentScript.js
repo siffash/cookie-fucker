@@ -72,7 +72,6 @@ function main () {
 						el_css['display'] !== 'none' &&
 						el_css['visibility'] !== 'hidden' &&
 						(
-							el_css['opacity'] < 1 ||
 							el_css['background-color'].match(alpha) && el_css['background-color'].match(alpha)[1] < 1 ||
 							el_css['background-color'] === 'rgb(0, 0, 0)'
 						)
